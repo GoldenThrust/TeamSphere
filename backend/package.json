@@ -13,13 +13,15 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.3",
-    "mongoose": "^8.2.1"
+    "mongoose": "^8.2.1",
+    "redis": "^4.6.13"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.25",
     "@types/nodemon": "^1.19.6",
     "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
   }
 }
