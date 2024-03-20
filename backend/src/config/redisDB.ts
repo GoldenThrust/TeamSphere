@@ -29,6 +29,14 @@ class RedisClient {
         });
     });
   }
+
+  async set(key: string, value: any, exp: number): Promise<string> {
+    return this.client.SETEX(key, exp, value);
+  }
+
+  async get(key: string): Promise<string | null> {
+    return this.client.get(key);
+  }
 }
 
 const redisClient = new RedisClient();
