@@ -1,0 +1,11 @@
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+header nav {
+    display: inherit;
+    gap: 50px;
+    justify-content: space-between;
+}
