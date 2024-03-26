@@ -1,22 +1,10 @@
-import express from "express";
-import DB from "./config/db";
-import redisClient from "./config/redisDB";
-import mongoose from 'mongoose';
+import express from 'express';
+import DB from './config/db';
 require('dotenv').config()
 
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
-// const uri: string =`${process.env.DB_URL}`;
-// console.log(uri);
-
-// mongoose.connect(`${process.env.DB_URL}`)
-// .then((result)=>{
-//     console.log('Connected to db');
-//     app.listen(PORT);
-// })
-// .catch((err)=> console.log(err));
-
 
 app.listen(PORT, () => {
   DB.connected()
