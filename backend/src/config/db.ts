@@ -3,12 +3,13 @@ require("dotenv").config();
 
 class DB {
   constructor() {
-    // const db: string = process.env.DB_CONNECTION || 'mongodb';
-    // const host: string = process.env.DB_HOST || 'localhost';
-    // const port: string | number = process.env.DB_PORT || 27017;
-    // const database: string = process.env.DB_DATABASE || 'TeamSphere';
-    // const dbURL: string = `${db}://${host}:${port}/${database}`;
-    const uri: string = `${process.env.DB_CONNECTION}`;
+    const db: string = process.env.DB_CONNECTION || 'mongodb';
+    const host: string = process.env.DB_HOST || 'localhost';
+    const port: string | number = process.env.DB_PORT || 27017;
+    const database: string = process.env.DB_DATABASE || 'TeamSphere';
+    const isProduction: boolean = process.env.PRODUCTION === 'true';
+    const uri: string = isProduction ? `${process.env.DB_CONNECTION}` : `${db}://${host}:${port}/${database}`;
+    console.log()
     try {
       mongoose.connect(uri, { autoIndex: true });
     } catch (error) {
