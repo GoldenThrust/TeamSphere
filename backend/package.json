@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --exec ts-node src/server.ts",
     "build": "tsc",
-    "start-server": "node build/src/server.js", 
+    "start-server": "node build/server.js", 
     "test": "mocha tests/**/*.test.ts --exit"
   },
   "keywords": [],
