@@ -6,6 +6,10 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
 
+app.get('/test', (req, res) => {
+  res.json({"hello": "world"})
+})
+
 app.listen(PORT, () => {
   DB.connected()
     .then((res) => {
