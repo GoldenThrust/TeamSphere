@@ -15,7 +15,7 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: aliceblue;
   text-decoration: inherit;
 }
 a:hover {
@@ -23,7 +23,7 @@ a:hover {
 }
 
 body {
-  margin: 20px;
+  margin: 0;
   min-width: 320px;
   min-height: 100vh;
 }

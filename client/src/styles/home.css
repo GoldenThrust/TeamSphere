@@ -1,0 +1,5 @@
+#home {
+    background: url('/src/assets/backgroud.png') no-repeat;
+    background-position: top right;
+    padding: 20px;
+}
