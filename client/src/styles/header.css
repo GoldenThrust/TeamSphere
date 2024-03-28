@@ -11,11 +11,11 @@ header nav {
     align-items: center;
 }
 
-a.css-sghohy-MuiButtonBase-root-MuiButton-root {
+body #home a.button {
     background-color: #022C3C;
 }
 
-a.css-sghohy-MuiButtonBase-root-MuiButton-root:hover {
+body #home a.button:hover {
     background-color: #123d4f;
     color: aliceblue;
 }

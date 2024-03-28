@@ -20,6 +20,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
+    "simple-peer": "^9.11.1",
+    "socket.io-client": "^4.7.5",
     "sort-by": "^0.0.2",
     "use-immer": "^0.9.0"
   },

@@ -1,4 +1,4 @@
-import TeamSphereLogo from "../../assets/TeamSphere.svg";
+import TeamSphereLogo from "/TeamSphere.svg";
 import { Link } from "react-router-dom"
 import Button from '@mui/material/Button';
 import "../../styles/home.css";
@@ -16,7 +16,7 @@ export default function Header() {
                 <Link to={"#features"}>
                     Features
                 </Link>
-                <Button variant="contained" sx={{}} href="login">
+                <Button className="button" variant="contained" sx={{}} href="login">
                     Login
                 </Button>
             </nav>
