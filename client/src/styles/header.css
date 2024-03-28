@@ -10,12 +10,3 @@ header nav {
     justify-content: space-between;
     align-items: center;
 }
-
-body #home a.button {
-    background-color: #022C3C;
-}
-
-body #home a.button:hover {
-    background-color: #123d4f;
-    color: aliceblue;
-}

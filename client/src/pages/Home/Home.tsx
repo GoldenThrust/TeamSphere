@@ -6,6 +6,7 @@ import { styled } from '@mui/system';
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
+import Button from '@mui/material/Button';
 import realTimeImage from "../../assets/realTime.png";
 import secureImage from "../../assets/secure.png";
 import userfriendlyImage from "../../assets/userfriendly.png";
@@ -31,13 +32,16 @@ function Home() {
         <Typography variant="body1" sx={{ color: "grey" }}>
           Elevate Your Teamwork to New Heights
         </Typography>
+        <Button className="button" variant="contained" sx={{marginTop: "20px", borderRadius: "0 50px 50px", height: "50px"}} href="signup">
+        Get Started
+        </Button>
         <div className="features">
           <Typography
             variant="h2"
             sx={{
               display: "flex",
               justifyContent: "center",
-              marginTop: "11ch",
+              marginTop: "10ch",
               fontWeight: "400"
             }}
           >

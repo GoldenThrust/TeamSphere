@@ -16,7 +16,7 @@ export default function Header() {
                 <Link to={"#features"}>
                     Features
                 </Link>
-                <Button className="button" variant="contained" sx={{}} href="login">
+                <Button className="button" variant="contained" href="login">
                     Login
                 </Button>
             </nav>
