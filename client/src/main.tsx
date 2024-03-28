@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import Home from './pages/Home/Home.tsx'
 import SignIn from './pages/Login/Login.tsx'
 import SignUp from './pages/SignUp/SignUp.tsx'
+import CreateMeeting from './pages/CreateMeeting/CreateMeeting.tsx'
 import './index.css'
 import {
   createBrowserRouter,
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignUp />,
+  },
+  {
+      path: "/create",
+      element: <CreateMeeting />,
   }
 ]);
 
