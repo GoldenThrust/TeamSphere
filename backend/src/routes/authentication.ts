@@ -6,6 +6,7 @@ const router = Router();
 const registration = async ( req:Request, res: Response) =>{
     try {
         const user = new UserModel(req.body);
+        // todo check if there is a user with the same email.
         await user.save()
         .then((result:any)=>{
             console.log(result.json);
