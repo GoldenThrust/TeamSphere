@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const validate = require('../utils/validate');
 
 exports.register = async (req, res) => {
   try {
