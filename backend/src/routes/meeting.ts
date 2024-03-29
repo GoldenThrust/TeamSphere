@@ -1,7 +1,9 @@
 import {Request, Response, Router} from 'express';
+const {WebsocketServer} =require( 'ws');
 
 const Meeting = require('../models/meeting');
 const router = Router();
+const sockserver = new WebsocketServer({ port: 443 })
 
 const create = async(req: Request, res: Response)=>{
     try{
@@ -23,7 +25,7 @@ const create = async(req: Request, res: Response)=>{
 
 const join = async (req: Request, res: Response)=>{
     try{
-
+        
     }
     catch(err){
 
