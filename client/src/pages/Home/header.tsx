@@ -10,14 +10,16 @@ export default function Header() {
   return (
     <header>
       <div>
-        <img src={TeamSphereLogo} alt="TeamSphere Logo" />
+        <Link to={"/"}>
+          <img src={TeamSphereLogo} alt="TeamSphere Logo" />
+        </Link>
       </div>
       <nav>
         <Link to={"#home"}>Home</Link>
         <Link to={"#features"}>Features</Link>
         {auth?.isLoggedIn && auth?.user ? (
-          <Button className="button" variant="contained" href="create">
-            Create Meeting
+          <Button className="button" variant="contained" href="logout">
+            logout
           </Button>
         ) : (
           <Button className="button" variant="contained" href="login">

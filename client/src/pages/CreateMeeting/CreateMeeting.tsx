@@ -5,6 +5,7 @@ import { Stack } from "@mui/material";
 import { useEffect } from "react";
 import { useAuth } from "../../context/useContext";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function CreateMeeting() {
   const auth = useAuth();
@@ -21,14 +22,16 @@ export default function CreateMeeting() {
       <div id="body" style={{ padding: "20px" }}>
         <header>
           <div>
-            <img src={TeamSphereLogo} alt="TeamSphere Logo" />
+            <Link to={"/"}>
+              <img src={TeamSphereLogo} alt="TeamSphere Logo" />
+            </Link>
           </div>
         </header>
         <main className="center">
           <Typography
             component="h1"
             variant="h3"
-            sx={{ textAlign: "center", margin: "auto"}}
+            sx={{ textAlign: "center", margin: "auto" }}
           >
             Video calls and meetings are for everyone
           </Typography>
