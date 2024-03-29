@@ -4,6 +4,7 @@ import Home from './pages/Home/Home.tsx'
 import SignIn from './pages/Login/Login.tsx'
 import SignUp from './pages/SignUp/SignUp.tsx'
 import CreateMeeting from './pages/CreateMeeting/CreateMeeting.tsx'
+import Room from './pages/Room/Room.tsx'
 import './index.css'
 import {
   createBrowserRouter,
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
       path: "/create",
       element: <CreateMeeting />,
+  },
+  {
+    path: "/room/:roomId",
+    element: <Room />
   }
 ]);
 

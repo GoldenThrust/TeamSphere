@@ -1,14 +1,13 @@
-import { timeStamp } from "console";
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    firstName: {
+    firstname: {
       type: String,
       required: true
     },
-    lastName: {
+    lastname: {
       type: String,
       required: true
     },
@@ -26,5 +25,5 @@ const userSchema = new Schema(
 
 // model
 const User = mongoose.model("User", userSchema);
-// export
-module.exports = User;
+
+export default User;
