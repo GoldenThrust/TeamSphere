@@ -2,6 +2,7 @@ import express from 'express';
 import DB from './config/db';
 require('dotenv').config();
 import user from './routes/authentication';
+import meeting from './routes/meeting';
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -24,5 +25,7 @@ app.listen(PORT, () => {
   
 // ..... Routes ......
 app.use('/user', user);
+app.use('/meeting', meeting);
+
 
 export default app;
