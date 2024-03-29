@@ -11,6 +11,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
+import { useAuth } from "../../context/useContext";
+import { toast } from "react-hot-toast";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -27,17 +31,32 @@ const VisuallyHiddenInput = styled("input")({
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    try {
+      toast.loading("Signing Up", { id: "signup" });
+      await auth?.signup(data);
+      toast.success("Signed Up Successfully", { id: "signup" });
+    } catch (error) {
+      console.log(error);
+      toast.error("Signing Up Failed", { id: "signup" });
+    }
   };
+
+  useEffect(() => {
+    if (auth?.user) {
+      return navigate("/create");
+    }
+  }, [auth, navigate]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -64,10 +83,10 @@ export default function SignUp() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="firstname"
                   required
                   fullWidth
-                  id="firstName"
+                  id="firstname"
                   label="First Name"
                   autoFocus
                 />
@@ -76,9 +95,9 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
+                  id="lastname"
                   label="Last Name"
-                  name="lastName"
+                  name="lastname"
                   autoComplete="family-name"
                 />
               </Grid>
@@ -114,7 +133,7 @@ export default function SignUp() {
                   sx={{ width: "100%" }}
                 >
                   Upload Profile Picture
-                  <VisuallyHiddenInput type="file" />
+                  <VisuallyHiddenInput type="file" name="image" accept="image/*" required/>
                 </Button>
               </Grid>
             </Grid>

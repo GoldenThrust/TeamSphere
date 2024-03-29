@@ -1,7 +1,19 @@
 // import { Grid } from "@mui/material";
+import { useEffect } from "react";
+import { useAuth } from "../../context/useContext";
+import { useNavigate } from "react-router-dom";
+
 export default function Room() {
-  // const numRows = Math.ceil(Math.sqrt(participants.length));
-  // const numCols = Math.ceil(participants.length / numRows);
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!auth?.isLoggedIn) {
+      return navigate("/login");
+    }
+  }, [auth, navigate]);
+
+
   return (
     <div style={{ flexGrow: 1 }}>
     </div>

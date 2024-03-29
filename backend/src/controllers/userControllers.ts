@@ -18,21 +18,18 @@ class UserController {
 
   async userSignup(req: Request, res: Response, next: NextFunction) {
     try {
-      //user signup
       const { firstname, lastname, email, password } = req.body;
       const existingUser = await User.findOne({ email });
       if (existingUser) return res.status(401).send("User already registered");
       const hashedPassword = await hash(password, 10);
       // const localPath = `${email}_${hashedPassword}`
       let image = ''; // Initialize image variable
-    
+      
       // Check if there's a file uploaded
       if (req.file) {
         // Save the path to the uploaded image
         image = req.file.path;
       }
-
-      console.log(req.file)
 
       const user = new User({ firstname, lastname, email, password: hashedPassword, image });
       await user.save();
@@ -72,7 +69,6 @@ class UserController {
     next: NextFunction
   ) {
     try {
-      //user login
       const { email, password } = req.body;
       const user = await User.findOne({ email });
       if (!user) {
@@ -119,7 +115,6 @@ class UserController {
     next: NextFunction
   ) {
     try {
-      //user token check
       const user = await User.findById(res.locals.jwtData.id);
       if (!user) {
         return res.status(401).send("User not registered OR Token malfunctioned");

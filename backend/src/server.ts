@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-app.use(cors({ origin: "0.0.0.0", credentials: true }));
+app.use(cors({ origin: "https://teamsphere-1-y8kv.onrender.com", credentials: true }));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 

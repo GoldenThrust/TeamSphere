@@ -11,19 +11,38 @@ import TeamSphereLogo from "/teamsphereIcon.svg";
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import corporateImage from '../../assets/corporate.png'
+import { toast } from "react-hot-toast";
+import { useAuth } from "../../context/useContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const auth = useAuth();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    try {
+      toast.loading("Signing In", { id: "login" });
+      await auth?.login(email, password);
+      toast.success("Signed In Successfully", { id: "login" });
+    } catch (error) {
+      console.log(error);
+      toast.error("Signing In Failed", { id: "login" });
+    }
   };
+
+  useEffect(() => {
+    if (auth?.user) {
+      return navigate("/create");
+    }
+  }, [auth]);
 
   return (
     <ThemeProvider theme={defaultTheme}>

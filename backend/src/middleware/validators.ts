@@ -10,7 +10,7 @@ export function validate(validations: ValidationChain[]) {
       }
     }
     const errors = validationResult(req);
-
+    
     if (errors.isEmpty()) {
       return next();
     }

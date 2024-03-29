@@ -2,7 +2,20 @@ import TeamSphereLogo from "/TeamSphere.svg";
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { Stack } from "@mui/material";
+import { useEffect } from "react";
+import { useAuth } from "../../context/useContext";
+import { useNavigate } from "react-router-dom";
+
 export default function CreateMeeting() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!auth?.isLoggedIn) {
+      return navigate("/login");
+    }
+  }, [auth, navigate]);
+
   return (
     <>
       <div id="body" style={{ padding: "20px" }}>
