@@ -1,28 +1,30 @@
-import {Request, Response, Router} from 'express';
-const UserModel = require('../models/user');
+import { Request, Response, Router } from 'express';
+import UserModel from '../models/user';
+import validate from '../utils/validate';
 
 const router = Router();
 
-const registration = async ( req:Request, res: Response) =>{
-    try {
-        const user = new UserModel(req.body);
-        // todo check if there is a user with the same email.
-        await user.save()
-        .then((result:any)=>{
-            console.log(result.json);
-            res.status(200).json(result);
-        })
-        .catch((err: any)=>{
-            console.log('could not post............');
-            res.status(500).json({ error: `Something went wrong! ${err}` });
-        });
-        
-    } catch (err) {
-        console.log('something happended');
-        console.error(err);
-        res.status(500).json({ error: `Something went wrong! ${err}` });
-    }
-}
+const registration = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate email and password
+    const errors = validate(req.body);
+    if (errors) return res.status(400).json({ errors });
+
+    // Check if there is a user with the same email
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: 'Email already exists' });
+
+    const user = new UserModel({ email, password });
+    await user.save();
+
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 const login= async (req:Request, res: Response) =>{
     try {
