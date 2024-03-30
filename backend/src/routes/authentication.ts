@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import UserModel from '../models/user';
 import validate from '../utils/validate';
+import bcrypt from 'bcrypt';
 
 const router = Router();
 
