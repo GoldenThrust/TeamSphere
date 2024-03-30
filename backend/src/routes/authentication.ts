@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import UserModel from '../models/user';
-import validate from '../utils/validate';
+import { validateRegistrationData as validate }  from '../utils/validate';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
