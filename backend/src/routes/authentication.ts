@@ -48,7 +48,7 @@ const login = async (req: Request, res: Response) => {
       if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
   
       // Generate JWT
-      const token = jwt.sign({ id: user._id }, 'your-secret-key');
+      const token = jwt.sign({ id: user._id }, 'Teamsphere');
   
       res.status(200).json({ message: 'Login successful', token });
     } catch (err) {
