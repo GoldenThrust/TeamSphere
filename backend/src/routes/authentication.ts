@@ -26,23 +26,28 @@ const registration = async (req: Request, res: Response) => {
   }
 };
 
-const login= async (req:Request, res: Response) =>{
+const login = async (req: Request, res: Response) => {
     try {
-        const {password, email } = req.body;
-        UserModel.findOne({email, password})
-        .then((result:any)=>{
-            if(result == null){
-                res.status(500).json({error:'Invalid email or password'});
-            }
-            else{
-                res.status(200).json(result);
-            }
-        })
+      const { email, password } = req.body;
+  
+      // Validate email and password
+      const errors = validate(req.body);
+      if (errors) return res.status(400).json({ errors });
+  
+      // Find user by email
+      const user = await UserModel.findOne({ email });
+      if (!user) return res.status(401).json({ message: 'Invalid email or password' });
+  
+      // Compare passwords
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(401).json({ message: 'Invalid email or password' });
+  
+      res.status(200).json({ message: 'Login successful' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ message: 'Server error' });
     }
-    catch( err ){
-        res.status(500).json({error: err});
-    }
-}
+  };
 
 router.post('/create', registration);
 router.post('/login', login);
