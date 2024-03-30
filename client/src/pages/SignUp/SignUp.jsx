@@ -5,7 +5,6 @@ import TextField from "@mui/material/TextField";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
-import TeamSphereLogo from "/teamsphereIcon.svg";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -34,7 +33,7 @@ export default function SignUp() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -68,7 +67,7 @@ export default function SignUp() {
           }}
         >
             <Link href="/">
-                <img src={TeamSphereLogo} alt="TeamSphere"  style={{ width: 100, height: 100, padding: "20px" }} />
+                <img src="/teamsphereIcon.svg" alt="TeamSphere"  style={{ width: 100, height: 100, padding: "20px" }} />
             </Link>
           <Typography component="h1" variant="h5" sx={{ fontWeight: "bold"}}>
             Sign up

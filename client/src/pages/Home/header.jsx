@@ -1,4 +1,3 @@
-import TeamSphereLogo from "/TeamSphere.svg";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import "../../styles/home.css";
@@ -11,7 +10,7 @@ export default function Header() {
     <header>
       <div>
         <Link to={"/"}>
-          <img src={TeamSphereLogo} alt="TeamSphere Logo" />
+          <img src="/TeamSphere.svg" alt="TeamSphere Logo" />
         </Link>
       </div>
       <nav>

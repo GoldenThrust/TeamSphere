@@ -1,5 +1,4 @@
 import {
-  ReactNode,
   createContext,
   useEffect,
   useState,
@@ -11,23 +10,10 @@ import {
   signupUser,
 } from "../utils/request";
 
-type User = {
-  name: string
-  email: string;
-};
+export const AuthContext = createContext(null);
 
-type UserAuth = {
-  user: User | null;
-  isLoggedIn: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (form: FormData) => Promise<void>;
-  logout: () => Promise<void>;
-};
-
-export const AuthContext = createContext<UserAuth | null>(null);
-
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -39,10 +25,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsLoggedIn(true);
       }
     }
-    checkStatus();
+      checkStatus();
   }, []);
 
-  async function login(email: string, password: string) {
+  async function login(email, password) {
     const data = await loginUser(email, password);
     if (data) {
       setUser({ email: data.email, name: data.name });
@@ -50,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function signup(form: FormData) {
+  async function signup(form) {
     const data = await signupUser(form);
     if (data) {
       setUser({ email: data.email, name: data.name });

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function loginUser(email: string, password: string) {
+export async function loginUser(email, password) {
   const res = await axios.post("/user/login", { email, password });
   if (res.status !== 200) {
     throw new Error("Unable to login");
@@ -9,7 +9,7 @@ export async function loginUser(email: string, password: string) {
   return data;
 }
 
-export async function signupUser(form: FormData) {
+export async function signupUser(form) {
   const res = await axios.post("/user/create", form);
   if (res.status !== 201) {
     throw new Error("Unable to Signup");

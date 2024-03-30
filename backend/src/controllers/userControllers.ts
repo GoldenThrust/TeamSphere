@@ -22,12 +22,9 @@ class UserController {
       const existingUser = await User.findOne({ email });
       if (existingUser) return res.status(401).send("User already registered");
       const hashedPassword = await hash(password, 10);
-      // const localPath = `${email}_${hashedPassword}`
-      let image = ''; // Initialize image variable
+      let image = '';
       
-      // Check if there's a file uploaded
       if (req.file) {
-        // Save the path to the uploaded image
         image = req.file.path;
       }
 
@@ -35,7 +32,6 @@ class UserController {
       await user.save();
 
       res.clearCookie(COOKIE_NAME, {
-        httpOnly: true,
         domain: "localhost",
         signed: true,
         path: "/",
@@ -48,7 +44,6 @@ class UserController {
         path: "/",
         domain: "localhost",
         expires,
-        httpOnly: true,
         signed: true,
       });
 
@@ -80,7 +75,6 @@ class UserController {
       }
   
       res.clearCookie(COOKIE_NAME, {
-        httpOnly: true,
         domain: "localhost",
         signed: true,
         path: "/",
@@ -94,7 +88,6 @@ class UserController {
         path: "/",
         domain: "localhost",
         expires,
-        httpOnly: true,
         signed: true,
       });
 
@@ -150,7 +143,6 @@ class UserController {
       }
   
       res.clearCookie(COOKIE_NAME, {
-        httpOnly: true,
         domain: "localhost",
         signed: true,
         path: "/",

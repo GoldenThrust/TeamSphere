@@ -1,4 +1,4 @@
-import TeamSphereLogo from "/TeamSphere.svg";
+
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { Stack } from "@mui/material";
@@ -6,10 +6,16 @@ import { useEffect } from "react";
 import { useAuth } from "../../context/useContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { v1 as uuid } from "uuid";
 
 export default function CreateMeeting() {
   const auth = useAuth();
   const navigate = useNavigate();
+
+  const HandClick = () => {
+    const id = uuid();
+    navigate(`/room/${id}`);
+  }
 
   useEffect(() => {
     if (!auth?.isLoggedIn) {
@@ -23,7 +29,7 @@ export default function CreateMeeting() {
         <header>
           <div>
             <Link to={"/"}>
-              <img src={TeamSphereLogo} alt="TeamSphere Logo" />
+              <img src="/TeamSphere.svg" alt="TeamSphere Logo" />
             </Link>
           </div>
         </header>
@@ -64,6 +70,7 @@ export default function CreateMeeting() {
                 width: "50%",
                 height: "45px",
               }}
+              onClick={HandClick}
             >
               Create instant meeting
             </Button>

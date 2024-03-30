@@ -7,7 +7,6 @@ import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import TeamSphereLogo from "/teamsphereIcon.svg";
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import corporateImage from '../../assets/corporate.png'
@@ -23,11 +22,11 @@ export default function SignIn() {
   const navigate = useNavigate();
   const auth = useAuth();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const email = formData.get("email");
+    const password = formData.get("password");
     try {
       toast.loading("Signing In", { id: "login" });
       await auth?.login(email, password);
@@ -42,7 +41,7 @@ export default function SignIn() {
     if (auth?.user) {
       return navigate("/create");
     }
-  }, [auth]);
+  }, [auth, navigate]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -73,7 +72,7 @@ export default function SignIn() {
             }}
           >
             <Link href="/">
-                <img src={TeamSphereLogo} alt="TeamSphere"  style={{ width: 100, height: 100, padding: "20px" }} />
+                <img src="/teamsphereIcon.svg" alt="TeamSphere"  style={{ width: 100, height: 100, padding: "20px" }} />
             </Link>
                 
             <Typography component="h1" variant="h5" sx={{ fontWeight: "bold"}}>
