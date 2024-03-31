@@ -32,6 +32,9 @@ class UserController {
       await user.save();
 
       res.clearCookie(COOKIE_NAME, {
+        secure: true,
+        sameSite: "none",
+        httpOnly: true,
         domain: "localhost",
         signed: true,
         path: "/",
@@ -41,6 +44,9 @@ class UserController {
       const expires = new Date();
       expires.setDate(expires.getDate() + 7);
       res.cookie(COOKIE_NAME, token, {
+        secure: true,
+        sameSite: "none",
+        httpOnly: true,
         path: "/",
         domain: "localhost",
         expires,
@@ -51,7 +57,7 @@ class UserController {
 
       return res
         .status(201)
-        .json({ message: "OK", name, email: user.email });
+        .json({ message: "OK", name, email: user.email});
     } catch (error: any) {
       console.log(error);
       return res.status(200).json({ message: "ERROR", cause: error.message });
@@ -75,6 +81,9 @@ class UserController {
       }
   
       res.clearCookie(COOKIE_NAME, {
+        secure: true,
+        sameSite: "none",
+        httpOnly: true,
         domain: "localhost",
         signed: true,
         path: "/",
@@ -85,11 +94,15 @@ class UserController {
       expires.setDate(expires.getDate() + 7);
 
       res.cookie(COOKIE_NAME, token, {
+        secure: true,
+        sameSite: "none",
+        httpOnly: true,
         path: "/",
         domain: "localhost",
         expires,
         signed: true,
       });
+
 
       const name = user.firstname + " " + user.lastname
 
@@ -143,6 +156,9 @@ class UserController {
       }
   
       res.clearCookie(COOKIE_NAME, {
+        secure: true,
+        sameSite: "none",
+        httpOnly: true,
         domain: "localhost",
         signed: true,
         path: "/",
