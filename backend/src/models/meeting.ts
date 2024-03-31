@@ -11,11 +11,11 @@ const meetingSchema = new Schema(
             required: true,
         },
         startTime:{
-            type: timeStamp,
+            type: Date,
             require: true,
         },
         endTime:{
-            type: timeStamp,
+            type: Date,
             require: true,
         }
     }

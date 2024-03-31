@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express';
-import UserModel from '../models/user';
-import { validateRegistrationData as validate }  from '../utils/validate';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+const UserModel = require('../models/user');
+const {validateRegistrationData }  = require('../utils/validate');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const router = Router();
 
@@ -11,11 +11,12 @@ const registration = async (req: Request, res: Response) => {
       const { email, password } = req.body;
   
       // Validate email and password
-      const errors = validate(req.body);
+      const errors = validateRegistrationData(req.body);
       if (errors) return res.status(400).json({ errors });
   
       // Check if there is a user with the same email
       const existingUser = await UserModel.findOne({ email });
+      console.log(existingUser);
       if (existingUser) return res.status(400).json({ message: 'Email already exists' });
   
       // Hash the password before saving it to the database
@@ -25,7 +26,7 @@ const registration = async (req: Request, res: Response) => {
       await user.save();
   
       res.status(201).json({ message: 'User created successfully' });
-    } catch (err) {
+    } catch (err: any) {
       console.error(err.message);
       res.status(500).json({ message: 'Server error' });
     }
@@ -36,7 +37,7 @@ const login = async (req: Request, res: Response) => {
       const { email, password } = req.body;
   
       // Validate email and password
-      const errors = validate(req.body);
+      const errors = validateRegistrationData(req.body);
       if (errors) return res.status(400).json({ errors });
   
       // Find user by email
@@ -51,7 +52,7 @@ const login = async (req: Request, res: Response) => {
       const token = jwt.sign({ id: user._id }, 'Teamsphere');
   
       res.status(200).json({ message: 'Login successful', token });
-    } catch (err) {
+    } catch (err: any) {
       console.error(err.message);
       res.status(500).json({ message: 'Server error' });
     }
