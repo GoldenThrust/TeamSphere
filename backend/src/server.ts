@@ -2,13 +2,13 @@ import express from "express";
 import DB from "./config/db";
 import userRoutes from "./routes/user";
 import cors from "cors";
-import cookieParser from "cookie-parser";
+const cookieParser = require( "cookie-parser");
 import socket from "socket.io";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import Room from "./models/room";
 import authenticateToken from "./utils/validateUser";
-import User from "./models/user";
+const Meeting = require('./models/meeting');
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
@@ -103,5 +103,15 @@ httpServer.listen(PORT, () => {
     });
   console.log(`Server is running on port ${PORT}`);
 });
+ 
+
+  app.get('/test', (req, res) => {
+    res.json({"hello": "world"})
+  })
+  
+// ..... Routes ......
+app.use('/user', userRoutes);
+app.use('/meeting', Meeting);
+
 
 export default app;
