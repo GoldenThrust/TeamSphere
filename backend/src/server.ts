@@ -12,7 +12,7 @@ import User from "./models/user";
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
-const allowUrl = "https://teamsphere-1-y8kv.onrender.com";
+const allowUrl = " http://172.29.203.140:3000";
 const app = express();
 const httpServer = createServer(app);
 

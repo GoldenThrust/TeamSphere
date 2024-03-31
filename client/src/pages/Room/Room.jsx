@@ -24,7 +24,7 @@ export default function Room() {
   const userVideo = useRef();
   const peersRef = useRef([]);
   const { roomID } = useParams();
-  const socket = io("https://teamsphere-ckxa.onrender.com", { withCredentials: true });
+  const socket = io("http://localhost:5000", { withCredentials: true });
 
   useEffect(() => {
     navigator.mediaDevices
