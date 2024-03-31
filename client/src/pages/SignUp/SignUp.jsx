@@ -48,14 +48,13 @@ export default function SignUp() {
   };
 
   useEffect(() => {
-    if (auth?.user) {
+    if (auth?.isLoggedIn) {
       return navigate("/create");
     }
-  }, [auth, navigate]);
+  });
 
   return (
     <ThemeProvider theme={defaultTheme}>
-
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -66,10 +65,14 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
-            <Link href="/">
-                <img src="/teamsphereIcon.svg" alt="TeamSphere"  style={{ width: 100, height: 100, padding: "20px" }} />
-            </Link>
-          <Typography component="h1" variant="h5" sx={{ fontWeight: "bold"}}>
+          <Link href="/">
+            <img
+              src="/teamsphereIcon.svg"
+              alt="TeamSphere"
+              style={{ width: 100, height: 100, padding: "20px" }}
+            />
+          </Link>
+          <Typography component="h1" variant="h5" sx={{ fontWeight: "bold" }}>
             Sign up
           </Typography>
           <Box
@@ -132,7 +135,12 @@ export default function SignUp() {
                   sx={{ width: "100%" }}
                 >
                   Upload Profile Picture
-                  <VisuallyHiddenInput type="file" name="image" accept="image/*" required/>
+                  <VisuallyHiddenInput
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    required
+                  />
                 </Button>
               </Grid>
             </Grid>

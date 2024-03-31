@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import User from "./chat";
+import { v4 as uuid } from "uuid";
 
 const Schema = mongoose.Schema;
 
@@ -10,6 +11,11 @@ const inviteSchema = new Schema(
         ref: 'User',
         required: true
       }],
+      roomID: {
+        type: String,
+        default: uuid(),
+        required: true
+      }
     },
     { timestamps: true }
 );

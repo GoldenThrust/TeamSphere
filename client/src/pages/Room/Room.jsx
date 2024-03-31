@@ -1,23 +1,30 @@
-//@ts-nocheck
-import { Grid } from "@mui/material";
+import { useAuth } from "../../context/useContext";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-// import { useAuth } from "../../context/useContext";
-// import { useNavigate } from "react-router-dom";
+import "../../styles/videocontainer.css";
 import Peer from "simple-peer";
+import Head from "./Header";
 
 const Video = ({ peer }) => {
   const ref = useRef();
 
   useEffect(() => {
     peer.on("stream", (stream) => {
-      console.log(peer)
+      console.log(peer);
       ref.current.srcObject = stream;
     });
+    // return () => {
+    //   peer.destroy();
+    // };
   });
 
-  return <video playsInline autoPlay ref={ref} />;
+  return (
+    <div className="video-item">
+      <video playsInline autoPlay ref={ref} />
+    </div>
+  );
 };
 
 export default function Room() {
@@ -25,57 +32,74 @@ export default function Room() {
   const userVideo = useRef();
   const peersRef = useRef([]);
   const ReturnSignal = useRef([]);
+  const navigate = useNavigate();
+  const auth = useAuth();
   const { roomID } = useParams();
+  const check = useRef(false);
   const socket = io("http://localhost:5000", { withCredentials: true });
 
   useEffect(() => {
+    if (!check) {
+      if (!auth?.isLoggedIn) {
+        return navigate("/login");
+      }
+      console.log("hello");
+    }
+    check.current = true;
+  }, [auth.isLoggedIn, check, navigate]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({ video: { width: 1920, height: 1080 }, audio: true })
       .then((stream) => {
         userVideo.current.srcObject = stream;
         socket.emit("joinroom", roomID);
         socket.on("connectedUsers", (users) => {
           const peers = [];
           users.forEach(({ socketID }) => {
-            const peerExists = peersRef.current.some((peer) => peer.peerID === socketID);
+            const peerExists = peersRef.current.some(
+              (peer) => peer.peerID === socketID
+            );
             if (peerExists) {
               return;
             }
-        
+
             const peer = createPeer(socketID, socket.id, stream);
             peersRef.current.push({
               peerID: socketID,
               peer,
             });
-        
+
             peers.push(peer);
           });
           setPeers(peers);
         });
 
         socket.on("userJoined", ({ signal, callerID }) => {
-          const peerExists = peersRef.current.some((peer) => peer.peerID === callerID);
+          const peerExists = peersRef.current.some(
+            (peer) => peer.peerID === callerID
+          );
           if (peerExists) {
             return;
           }
-        
+
           const peer = addPeer(signal, callerID, stream);
           peersRef.current.push({
             peerID: callerID,
             peer,
           });
-        
+
           setPeers((prevPeers) => [...prevPeers, peer]);
         });
-        
 
         socket.on("receiveReturnSignal", ({ signal, id }) => {
           const item = peersRef.current.find((p) => p.peerID === id);
-          
+
           if (ReturnSignal.current.includes(item.peerID)) {
             return;
           }
-        
+
           if (item) {
             ReturnSignal.current.push(item.peerID);
             item.peer.signal(signal);
@@ -83,13 +107,18 @@ export default function Room() {
         });
       });
 
-      socket.on("alreadyinroom", (user)=> {
-        console.log("You are already in this room", user)
-      })
+    socket.on("alreadyinroom", (user) => {
+      console.log("You are already in this room", user);
+    });
 
-      socket.on("roomfull", ()=>{
-        console.log("Room is full")
-      })
+    socket.on("roomfull", () => {
+      console.log("Room is full");
+    });
+
+    // return () => {
+    //   document.body.style.overflow = "auto";
+    //   socket.disconnect();
+    // };
   });
 
   function createPeer(userToSignal, callerID, stream) {
@@ -120,22 +149,27 @@ export default function Room() {
     peer.on("signal", (signal) => {
       socket.emit("returnSignal", { signal, callerID });
     });
-    
+
     peer.signal(incomingSignal);
 
     return peer;
   }
 
   return (
-    <Grid container spacing={2} style={{ padding: 20, height: "100vh" }}>
-      <video ref={userVideo} autoPlay playsInline></video>
-      {peers.map((peer, index) => {
-        return (
-          // <Grid  item xs={12} sm={6}>
-          <Video key={index} peer={peer} />
-          // </Grid>
-        );
-      })}
-    </Grid>
+    <>
+      <div className="body">
+        <span style={{ width: "100%"}}>
+          <Head />
+        </span>
+        <div className="video-grid">
+          <div className="video-item">
+            <video ref={userVideo} autoPlay playsInline></video>
+          </div>
+          {peers.map((peer, index) => {
+            return <Video peer={peer} key={index} />;
+          })}
+        </div>
+      </div>
+    </>
   );
 }

@@ -57,22 +57,40 @@ io.on("connection", (socket) => {
 
   socket.on("joinroom", async (roomID) => {
     try {
-      const roomsLength = await Room.countDocuments({ roomID });
+      const roomsLength = await Room.countDocuments({ roomID, active: true });
       if (roomsLength === 4) {
         socket.emit("roomfull");
         return;
       }
 
-      const userInRoom = await Room.findOne({ user, roomID });
+      const userInRoom = await Room.findOne({ user, roomID, active: true });
       if (userInRoom) {
         //@ts-ignore
         socket.emit("alreadyinroom", socket.user);
         return;
       }
 
-      await Room.create({ roomID, user, socketID: socket.id });
+      const userInRoomInactive = await Room.findOne({
+        user,
+        roomID,
+        active: false,
+      });
 
-      const usersInThisRoom = await Room.find({ roomID, user: { $ne: user }, active: true });
+      if (userInRoomInactive) {
+        await Room.findOneAndUpdate(
+          { user },
+          { $set: { active: true } },
+          { new: true }
+        );
+      } else {
+        await Room.create({ roomID, user, socketID: socket.id });
+      }
+
+      const usersInThisRoom = await Room.find({
+        roomID,
+        user: { $ne: user },
+        active: true,
+      });
       socket.emit("connectedUsers", usersInThisRoom);
     } catch (error: any) {
       console.error("Error in joinroom:", error);
@@ -95,7 +113,8 @@ io.on("connection", (socket) => {
         { $set: { active: false } },
         { new: true }
       );
-      io.emit("userDisconnected", { user });
+
+      // io.to()emit("userDisconnected", { user }); to do set user rom in authenticated so that it can destroy peer in room
     } catch (error) {
       console.error("Error handling disconnect:", error);
     }

@@ -1,12 +1,11 @@
-
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { Stack } from "@mui/material";
-import { useEffect } from "react";
 import { useAuth } from "../../context/useContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { v1 as uuid } from "uuid";
+import { useEffect } from "react";
 
 export default function CreateMeeting() {
   const auth = useAuth();
@@ -15,13 +14,12 @@ export default function CreateMeeting() {
   const HandClick = () => {
     const id = uuid();
     navigate(`/room/${id}`);
-  }
-
+  };
   useEffect(() => {
     if (!auth?.isLoggedIn) {
       return navigate("/login");
     }
-  }, [auth, navigate]);
+  });
 
   return (
     <>
