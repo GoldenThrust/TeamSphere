@@ -12,6 +12,7 @@ const Video = ({ peer }) => {
 
   useEffect(() => {
     peer.on("stream", (stream) => {
+      console.log(peer)
       ref.current.srcObject = stream;
     });
   }, [peer]);
@@ -23,8 +24,9 @@ export default function Room() {
   const [peers, setPeers] = useState([]);
   const userVideo = useRef();
   const peersRef = useRef([]);
+  const ReturnSignal = useRef([]);
   const { roomID } = useParams();
-  const socket = io("https://teamsphere-ckxa.onrender.com", { withCredentials: true });
+  const socket = io("http://localhost:5000", { withCredentials: true });
 
   useEffect(() => {
     navigator.mediaDevices
@@ -34,41 +36,61 @@ export default function Room() {
         socket.emit("joinroom", roomID);
         socket.on("connectedUsers", (users) => {
           const peers = [];
-          users.forEach((userID) => {
-            const peer = createPeer(userID, socket.id, stream);
+          users.forEach(({ socketID }) => {
+            const peerExists = peersRef.current.some((peer) => peer.peerID === socketID);
+            if (peerExists) {
+              return;
+            }
+        
+            const peer = createPeer(socketID, socket.id, stream);
             peersRef.current.push({
-              peerID: userID,
+              peerID: socketID,
               peer,
             });
+        
             peers.push(peer);
           });
           setPeers(peers);
         });
 
         socket.on("userJoined", ({ signal, callerID }) => {
+          const peerExists = peersRef.current.some((peer) => peer.peerID === callerID);
+          if (peerExists) {
+            return;
+          }
+        
           const peer = addPeer(signal, callerID, stream);
           peersRef.current.push({
             peerID: callerID,
             peer,
           });
-
-          setPeers((users) => [...users, peer]);
+        
+          setPeers((prevPeers) => [...prevPeers, peer]);
         });
+        
 
         socket.on("receiveReturnSignal", ({ signal, id }) => {
           const item = peersRef.current.find((p) => p.peerID === id);
-          item.peer.signal(signal);
+          
+          if (ReturnSignal.current.includes(item.peerID)) {
+            return;
+          }
+        
+          if (item) {
+            ReturnSignal.current.push(item.peerID);
+            item.peer.signal(signal);
+          }
         });
       });
 
-      socket.on("alreadyinroom", ()=> {
-        console.log("You are already in this room")
+      socket.on("alreadyinroom", (user)=> {
+        console.log("You are already in this room", user)
       })
 
       socket.on("roomfull", ()=>{
         console.log("Room is full")
       })
-  }, [roomID]);
+  });
 
   function createPeer(userToSignal, callerID, stream) {
     const peer = new Peer({
@@ -98,7 +120,7 @@ export default function Room() {
     peer.on("signal", (signal) => {
       socket.emit("returnSignal", { signal, callerID });
     });
-
+    
     peer.signal(incomingSignal);
 
     return peer;

@@ -12,7 +12,7 @@ import User from "./models/user";
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
-const allowUrl = "https://teamsphere-1-y8kv.onrender.com";
+const allowUrl = "http://localhost:3000";
 const app = express();
 const httpServer = createServer(app);
 
@@ -51,35 +51,33 @@ const users: any = {};
 
 const socketToRoom: any = {};
 const roomToUsers: any = {};
-
 io.on("connection", (socket) => {
   //@ts-ignore
   const user = socket.user.id.toString();
-  socket.on("joinroom", (roomID) => {
-    if (users[roomID]) {
-      const length = users[roomID].length;
-      const userInroom = roomToUsers[roomID].filter((userID: any) => userID === user);
-      
-      if (userInroom.length > 0) {
-        socket.emit("alreadyinroom");
-        return;
-      }
-      if (length === 4) {
+
+  socket.on("joinroom", async (roomID) => {
+    try {
+      const roomsLength = await Room.countDocuments({ roomID });
+      if (roomsLength === 4) {
         socket.emit("roomfull");
         return;
       }
-      users[roomID].push(socket.id);
-      roomToUsers[roomID].push(user);
-    } else {
-      roomToUsers[roomID] = [user];
-      users[roomID] = [socket.id];
+
+      const userInRoom = await Room.findOne({ user, roomID });
+      if (userInRoom) {
+        //@ts-ignore
+        socket.emit("alreadyinroom", socket.user);
+        return;
+      }
+
+      await Room.create({ roomID, user, socketID: socket.id });
+
+      const usersInThisRoom = await Room.find({ roomID, user: { $ne: user }, active: true });
+      socket.emit("connectedUsers", usersInThisRoom);
+    } catch (error: any) {
+      console.error("Error in joinroom:", error);
+      socket.emit("joinroomError", error.message);
     }
-
-    socketToRoom[socket.id] = roomID;
-    const usersInThisRoom = users[roomID].filter((id: any) => id !== socket.id);
-    console.log(roomToUsers)
-
-    socket.emit("connectedUsers", usersInThisRoom);
   });
 
   socket.on("sendSignal", ({ userToSignal, callerID, signal }) => {
@@ -90,7 +88,18 @@ io.on("connection", (socket) => {
     io.to(callerID).emit("receiveReturnSignal", { signal, id: socket.id });
   });
 
-  socket.on("disconnect", () => {});
+  socket.on("disconnect", async () => {
+    try {
+      const disconnectedUser = await Room.findOneAndUpdate(
+        { user },
+        { $set: { active: false } },
+        { new: true }
+      );
+      io.emit("userDisconnected", { user });
+    } catch (error) {
+      console.error("Error handling disconnect:", error);
+    }
+  });
 });
 
 httpServer.listen(PORT, () => {
