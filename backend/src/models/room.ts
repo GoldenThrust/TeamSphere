@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import User from "./chat";
-
+import Invite from "./invitation";
 const Schema = mongoose.Schema;
 
 const roomSchema = new Schema(
@@ -22,7 +22,17 @@ const roomSchema = new Schema(
     socketID: {
       type: String,
       required: true
-    }
+    },
+    restricted: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    invitedUsers: {
+      type: Schema.Types.ObjectId,
+      ref: 'Invite',
+      default: null,
+    },
   },
   { timestamps: true }
 );

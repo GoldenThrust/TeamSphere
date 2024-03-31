@@ -15,7 +15,7 @@ const Video = ({ peer }) => {
       console.log(peer)
       ref.current.srcObject = stream;
     });
-  }, [peer]);
+  });
 
   return <video playsInline autoPlay ref={ref} />;
 };
@@ -131,9 +131,9 @@ export default function Room() {
       <video ref={userVideo} autoPlay playsInline></video>
       {peers.map((peer, index) => {
         return (
-          <Grid key={index} item xs={12} sm={6}>
-            <Video peer={peer} />
-          </Grid>
+          // <Grid  item xs={12} sm={6}>
+          <Video key={index} peer={peer} />
+          // </Grid>
         );
       })}
     </Grid>
