@@ -47,23 +47,31 @@ app.get("/test", (req, res) => {
 
 app.use("/user", userRoutes);
 
-const users: any = {};
 
-const socketToRoom: any = {};
-const roomToUsers: any = {};
 io.on("connection", (socket) => {
+  let user: any = '';
   //@ts-ignore
-  const user = socket.user.id.toString();
+  let roomID: any = socket.room;
+  //@ts-ignore
+  if (socket.user) {
+    //@ts-ignore
+    user = socket.user.id.toString();
+  } else {
+    socket.emit("notauthorized");
+    return;
+  }
 
   socket.on("joinroom", async (roomID) => {
     try {
-      const roomsLength = await Room.countDocuments({ roomID, active: true });
+      const roomsLength = await Room.countDocuments({ roomID, active: true, user: { $ne: user} });
       if (roomsLength === 4) {
         socket.emit("roomfull");
         return;
       }
 
       const userInRoom = await Room.findOne({ user, roomID, active: true });
+
+    
       if (userInRoom) {
         //@ts-ignore
         socket.emit("alreadyinroom", socket.user);
@@ -78,19 +86,20 @@ io.on("connection", (socket) => {
 
       if (userInRoomInactive) {
         await Room.findOneAndUpdate(
-          { user },
+          { user, roomID },
           { $set: { active: true } },
           { new: true }
         );
       } else {
         await Room.create({ roomID, user, socketID: socket.id });
       }
-
+      
       const usersInThisRoom = await Room.find({
         roomID,
         user: { $ne: user },
         active: true,
       });
+      console.log(usersInThisRoom)
       socket.emit("connectedUsers", usersInThisRoom);
     } catch (error: any) {
       console.error("Error in joinroom:", error);
@@ -108,11 +117,15 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", async () => {
     try {
-      const disconnectedUser = await Room.findOneAndUpdate(
-        { user },
+      // Room.deleteOne({ user })
+      await Room.findOneAndUpdate(
+        { user, roomID },
         { $set: { active: false } },
         { new: true }
       );
+    
+      //@ts-ignore
+      console.log("disconnected successfully", socket.room, socket.user.email)
 
       // io.to()emit("userDisconnected", { user }); to do set user rom in authenticated so that it can destroy peer in room
     } catch (error) {
