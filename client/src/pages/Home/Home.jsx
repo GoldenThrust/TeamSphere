@@ -72,6 +72,7 @@ function Home() {
               marginTop: "10ch",
               fontWeight: "400",
             }}
+            id="features"
           >
             Features That Drive Success
           </Typography>

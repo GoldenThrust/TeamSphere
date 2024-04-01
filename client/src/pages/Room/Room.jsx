@@ -1,23 +1,18 @@
-import { useAuth } from "../../context/useContext";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import "../../styles/videocontainer.css";
 import Peer from "simple-peer";
 import Head from "./Header";
+import Foot from "./Foot";
 
 const Video = ({ peer }) => {
   const ref = useRef();
 
   useEffect(() => {
     peer.on("stream", (stream) => {
-      console.log(peer);
       ref.current.srcObject = stream;
     });
-    // return () => {
-    //   peer.destroy();
-    // };
   });
 
   return (
@@ -33,20 +28,13 @@ export default function Room() {
   const peersRef = useRef([]);
   const ReturnSignal = useRef([]);
   const navigate = useNavigate();
-  const auth = useAuth();
   const { roomID } = useParams();
-  const check = useRef(false);
-  const socket = io("http://localhost:5000", { withCredentials: true });
-
-  useEffect(() => {
-    if (!check) {
-      if (!auth?.isLoggedIn) {
-        return navigate("/login");
-      }
-      console.log("hello");
-    }
-    check.current = true;
-  }, [auth.isLoggedIn, check, navigate]);
+  const socket = io("http://localhost:5000", {
+    withCredentials: true,
+    query: {
+      roomId: roomID,
+    },
+  });
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -97,6 +85,7 @@ export default function Room() {
           const item = peersRef.current.find((p) => p.peerID === id);
 
           if (ReturnSignal.current.includes(item.peerID)) {
+            console.log(item, "Return signal");
             return;
           }
 
@@ -115,10 +104,13 @@ export default function Room() {
       console.log("Room is full");
     });
 
-    // return () => {
-    //   document.body.style.overflow = "auto";
-    //   socket.disconnect();
-    // };
+    socket.on("notauthorized", () => {
+      return navigate("/login");
+    });
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   });
 
   function createPeer(userToSignal, callerID, stream) {
@@ -139,6 +131,13 @@ export default function Room() {
     return peer;
   }
 
+  // const handleCallEnd = () => {
+  //   socket.emit("endcall", {
+  //     userToSignal: socket.id,
+  //     callerID: socket.id,
+  //   });
+  // }
+
   function addPeer(incomingSignal, callerID, stream) {
     const peer = new Peer({
       initiator: false,
@@ -158,7 +157,7 @@ export default function Room() {
   return (
     <>
       <div className="body">
-        <span style={{ width: "100%"}}>
+        <span style={{ width: "100%" }}>
           <Head />
         </span>
         <div className="video-grid">
@@ -169,6 +168,17 @@ export default function Room() {
             return <Video peer={peer} key={index} />;
           })}
         </div>
+        <span
+          style={{
+            width: "100%",
+            height: "50px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Foot />
+        </span>
       </div>
     </>
   );
