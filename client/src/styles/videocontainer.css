@@ -1,0 +1,51 @@
+.body {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #0A0B0B;
+  color: aliceblue;
+}
+
+body .tab {
+  color:aliceblue;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(550px,1fr));
+  aspect-ratio:  16/9;
+  gap: 10px;
+  height: 80%;
+}
+.video-item {
+  border-radius: 10px;
+  overflow: hidden;
+}
+video {
+  width: 100%;
+  height: 100%;
+}
+
+
+.calltoaction {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: black;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+.endcall {
+  background-color: red;
+}
