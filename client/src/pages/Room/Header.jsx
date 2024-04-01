@@ -15,7 +15,7 @@ export default function Head() {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ marginTop: "0px"}}>
       <Grid item xs={5}>
         <Typography
           variant="h6"
