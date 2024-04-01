@@ -1,5 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class TokenAuthentication {
-}
-exports.default = TokenAuthentication;
+exports.COOKIE_NAME = void 0;
+exports.COOKIE_NAME = "auth_token";

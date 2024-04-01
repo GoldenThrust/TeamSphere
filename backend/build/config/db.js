@@ -16,13 +16,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 require("dotenv").config();
 class DB {
     constructor() {
-        const isProduction = process.env.PRODUCTION === 'true';
-        const db = process.env.DB_CONNECTION || 'mongodb';
-        const host = process.env.DB_HOST || 'localhost';
-        const port = process.env.DB_PORT || 27017;
-        const database = process.env.DB_DATABASE || 'TeamSphere';
-        const uri = isProduction ? `${process.env.DB_CONNECTION}` : `${db}://${host}:${port}/${database}`;
-        console.log();
+        const uri = `${process.env.DB_CONNECTION}`;
+        console.log(uri);
         try {
             mongoose_1.default.connect(uri, { autoIndex: true });
         }

@@ -71,7 +71,7 @@ io.on("connection", (socket) => {
 
       const userInRoom = await Room.findOne({ user, roomID, active: true });
 
-    
+      
       if (userInRoom) {
         //@ts-ignore
         socket.emit("alreadyinroom", socket.user);
@@ -99,7 +99,6 @@ io.on("connection", (socket) => {
         user: { $ne: user },
         active: true,
       });
-      console.log(usersInThisRoom)
       socket.emit("connectedUsers", usersInThisRoom);
     } catch (error: any) {
       console.error("Error in joinroom:", error);
@@ -114,6 +113,27 @@ io.on("connection", (socket) => {
   socket.on("returnSignal", ({ signal, callerID }) => {
     io.to(callerID).emit("receiveReturnSignal", { signal, id: socket.id });
   });
+
+  socket.on("endcall", async () => {
+    const usersInThisRoom = await Room.find({
+      roomID,
+      user: { $ne: user },
+      active: true,
+    });
+
+    const userRoomID = await Room.findOne({
+      user,
+      roomID,
+      active: true,
+    })
+
+    const id = userRoomID?.socketID;
+    
+    usersInThisRoom.forEach(({ socketID }) => {
+      io.to(socketID).emit("receiveEndCall", { id })
+    })
+    socket.disconnect();
+  })
 
   socket.on("disconnect", async () => {
     try {

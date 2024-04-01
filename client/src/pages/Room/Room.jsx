@@ -9,11 +9,12 @@ import Foot from "./Foot";
 const Video = ({ peer }) => {
   const ref = useRef();
 
+
   useEffect(() => {
     peer.on("stream", (stream) => {
       ref.current.srcObject = stream;
     });
-  });
+  }, [peer]);
 
   return (
     <div className="video-item">
@@ -35,6 +36,11 @@ export default function Room() {
       roomId: roomID,
     },
   });
+
+  
+  useEffect(()=> {
+    console.log(peers)
+  }, [peers])
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -131,13 +137,6 @@ export default function Room() {
     return peer;
   }
 
-  // const handleCallEnd = () => {
-  //   socket.emit("endcall", {
-  //     userToSignal: socket.id,
-  //     callerID: socket.id,
-  //   });
-  // }
-
   function addPeer(incomingSignal, callerID, stream) {
     const peer = new Peer({
       initiator: false,
@@ -154,6 +153,25 @@ export default function Room() {
     return peer;
   }
 
+  function handleCallEnd() {
+    socket.emit("endcall");
+    navigate("/create");
+  }
+
+  socket.on("receiveEndCall",({ id })=> {
+    console.log("Received")
+    const item = peersRef.current.find((p) => p.peerID === id);
+
+    console.log(item)
+    if (item) {
+      item.peer.destroy();
+      console.log("beforeDestroy", peersRef.current.length, peers.length)
+      peersRef.current = peersRef.current.filter((p) => p.peerID !== id);
+      setPeers((prevPeers) => prevPeers.filter((p) => p.peerID !== id));
+      console.log("AfterDestroy", peersRef.current.length, peers.length)
+    }
+  })
+
   return (
     <>
       <div className="body">
@@ -164,8 +182,8 @@ export default function Room() {
           <div className="video-item">
             <video ref={userVideo} autoPlay playsInline></video>
           </div>
-          {peers.map((peer, index) => {
-            return <Video peer={peer} key={index} />;
+          {peersRef.current.map(({peer, peerID}) => {
+            return <Video peer={peer} key={peerID} />;
           })}
         </div>
         <span
@@ -177,7 +195,7 @@ export default function Room() {
             alignItems: "center",
           }}
         >
-          <Foot />
+          <Foot onCallEnd={handleCallEnd} />
         </span>
       </div>
     </>
