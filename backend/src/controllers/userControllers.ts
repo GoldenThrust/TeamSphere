@@ -57,7 +57,7 @@ class UserController {
 
       return res
         .status(201)
-        .json({ message: "OK", name, email: user.email});
+        .json({ message: "OK", name, email: user.email, cookie: token});
     } catch (error: any) {
       console.log(error);
       return res.status(200).json({ message: "ERROR", cause: error.message });
@@ -108,7 +108,7 @@ class UserController {
 
       return res
         .status(200)
-        .json({ message: "OK", name, email: user.email });
+        .json({ message: "OK", name, email: user.email, cookie: token });
     } catch (error: any) {
       console.log(error);
       return res.status(200).json({ message: "ERROR", cause: error.message });

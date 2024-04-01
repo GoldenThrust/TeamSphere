@@ -30,7 +30,7 @@ export default function Room() {
   const ReturnSignal = useRef([]);
   const navigate = useNavigate();
   const { roomID } = useParams();
-  const socket = io("http://localhost:5000", {
+  const socket = io("https://teamsphere-ckxa.onrender.com", {
     withCredentials: true,
     query: {
       roomId: roomID,

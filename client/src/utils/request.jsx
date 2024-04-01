@@ -6,6 +6,7 @@ export async function loginUser(email, password) {
     throw new Error("Unable to login");
   }
   const data = await res.data;
+  document.cookie = data.token;
   return data;
 }
 
