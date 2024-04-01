@@ -20,7 +20,7 @@ userRoutes.post(
   userContollers.userSignup
 );
 userRoutes.post("/login", validate(loginValidator), userContollers.userLogin);
-userRoutes.get("/auth-status", verifyToken, userContollers.verifyUser);
-userRoutes.get("/logout", verifyToken, userContollers.userLogout);
+userRoutes.post("/auth-status", verifyToken, userContollers.verifyUser);
+userRoutes.post("/logout", verifyToken, userContollers.userLogout);
 
 export default userRoutes;

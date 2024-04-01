@@ -6,7 +6,7 @@ export async function loginUser(email, password) {
     throw new Error("Unable to login");
   }
   const data = await res.data;
-  document.cookie = data.token;
+  localStorage.setItem('token', data.cookie);
   return data;
 }
 
@@ -16,11 +16,13 @@ export async function signupUser(form) {
     throw new Error("Unable to Signup");
   }
   const data = await res.data;
+  localStorage.setItem('token', data.cookie);
   return data;
 }
 
 export async function checkAuthStatus() {
-  const res = await axios.get("/user/auth-status");
+  const token = localStorage.getItem('token');
+  const res = await axios.post("/user/auth-status", { token });
   if (res.status !== 200) {
     throw new Error("Unable to authenticate");
   }
@@ -30,10 +32,12 @@ export async function checkAuthStatus() {
 
 
 export const logoutUser = async () => {
-  const res = await axios.get("/user/logout");
+  const token = localStorage.getItem('token');
+  const res = await axios.post("/user/logout", { token });
   if (res.status !== 200) {
     throw new Error("Unable to delete chats");
   }
   const data = await res.data;
+  localStorage.removeItem('token');
   return data;
 }

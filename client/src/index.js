@@ -19,7 +19,7 @@ window.global = window;
 window.process = process;
 window.Buffer = [];
 
-axios.defaults.baseURL = "https://teamsphere-ckxa.onrender.com";
+axios.defaults.baseURL = "https://teamsphere-ckxa.onrender.com/user/auth-status";
 axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([
