@@ -138,12 +138,12 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", async () => {
     try {
-      // Room.deleteOne({ user })
-      await Room.findOneAndUpdate(
-        { user, roomID },
-        { $set: { active: false } },
-        { new: true }
-      );
+      await Room.deleteOne({ user, roomID })
+      // await Room.findOneAndUpdate(
+      //   { user, roomID },
+      //   { $set: { active: false } },
+      //   { new: true }
+      // );
     
       // io.to()emit("userDisconnected", { user }); to do set user rom in authenticated so that it can destroy peer in room
     } catch (error) {
