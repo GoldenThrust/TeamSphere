@@ -34,6 +34,7 @@ export default function Room() {
     withCredentials: true,
     query: {
       roomId: roomID,
+      token: localStorage.getItem("token")
     },
   });
 
