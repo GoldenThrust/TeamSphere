@@ -9,12 +9,12 @@ import Foot from "./Foot";
 const Video = ({ peer }) => {
   const ref = useRef();
 
-
   useEffect(() => {
     peer.on("stream", (stream) => {
       ref.current.srcObject = stream;
     });
-  }, [peer]);
+    ref.current.srcObject = peer.streams[0];
+  }, [peer, peer._connected]);
 
   return (
     <div className="video-item">
@@ -31,6 +31,7 @@ export default function Room() {
   const navigate = useNavigate();
   const { roomID } = useParams();
   const socket = io("https://teamsphere-ckxa.onrender.com", {
+  // const socket = io("http://localhost:5000", {
     withCredentials: true,
     query: {
       roomId: roomID,

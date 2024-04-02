@@ -13,6 +13,7 @@ require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
 const allowUrl = "https://teamsphere-1-y8kv.onrender.com";
+// const allowUrl = "http://localhost:3000";
 const app = express();
 const httpServer = createServer(app);
 
@@ -144,9 +145,6 @@ io.on("connection", (socket) => {
         { new: true }
       );
     
-      //@ts-ignore
-      console.log("disconnected successfully", socket.room, socket.user.email)
-
       // io.to()emit("userDisconnected", { user }); to do set user rom in authenticated so that it can destroy peer in room
     } catch (error) {
       console.error("Error handling disconnect:", error);
