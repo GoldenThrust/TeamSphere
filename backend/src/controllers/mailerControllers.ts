@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user";
 import mail from "../config/mailservice";
-import { emailInfo } from "../../shared/interfaces/interface"
+import { emailInfo } from "../shared/interfaces/interface"
 
 class MailerController {
   async sendMail(req: Request, res: Response) {

@@ -1,7 +1,7 @@
 import { createTransport, Transporter } from "nodemailer";
 import fs from "fs";
 import { info } from "console";
-import { emailInfo } from "../../shared/interfaces/interface";
+import { emailInfo } from "../shared/interfaces/interface";
 
 class MailService {
   transporter: Transporter;
@@ -50,7 +50,7 @@ class MailService {
     }
 
     const mailOptions = {
-      from: "buynance631@gmail.com",
+      from: "TeamSphere",
       to: emailArray,
       subject: "Meet Me",
       html: HTML,
