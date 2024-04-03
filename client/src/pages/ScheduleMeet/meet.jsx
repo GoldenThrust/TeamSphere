@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { v1 as uuid } from "uuid";
 import { useAuth } from "../../context/useContext";
+import { useEffect } from "react";
+
 function MeetMe() {
   const auth = useAuth();
   const navigate = useNavigate();
@@ -14,9 +16,11 @@ function MeetMe() {
     formState: { errors },
   } = useForm();
 
-  if (!auth?.isLoggedIn) {
-    return navigate("/login");
-  }
+  useEffect(() => {
+    if (!auth?.isLoggedIn) {
+      return navigate("/login");
+    }
+  });
 
   const onSubmit = (data) => {
     console.log(data);
