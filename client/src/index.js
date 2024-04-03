@@ -14,6 +14,7 @@ import ErrorPage from "./error.page";
 import { Toaster } from "react-hot-toast";
 import * as serviceWorker from "./serviceWorker";
 import * as process from 'process';
+import MeetMe from "./pages/ScheduleMeet/meet";
 
 window.global = window;
 window.process = process;
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "/create",
     element: <CreateMeeting />,
+  },
+  {
+    path: "/create/meet",
+    element: <MeetMe />
   },
   {
     path: "/room/:roomID",

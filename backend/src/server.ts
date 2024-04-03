@@ -3,12 +3,12 @@ import DB from "./config/db";
 import userRoutes from "./routes/user";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import socket from "socket.io";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import Room from "./models/room";
 import authenticateToken from "./utils/validateUser";
 import User from "./models/user";
+import mail from "./config/mailservice";
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
@@ -160,6 +160,7 @@ httpServer.listen(PORT, () => {
     .catch((err) => {
       console.log("DB connection failed", err);
     });
+    mail
   console.log(`Server is running on port ${PORT}`);
 });
 
