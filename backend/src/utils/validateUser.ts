@@ -20,6 +20,7 @@ export default function authenticateToken(socket: any, next: any) {
       socket.room = roomID;
       return next();
     } catch (error) {
+      return next();
       return console.log(error);
     }
 }

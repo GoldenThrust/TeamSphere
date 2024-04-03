@@ -79,3 +79,37 @@ body .button:hover {
   background-color: #123d4f;
   color: aliceblue;
 }
+
+.w-100 {
+  width: 100%;
+}
+
+.FormDesign {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+}
+
+.FormDesign label {
+  width: 60%;
+  font-size: larger;
+  font-weight: 400;
+}
+
+.FormDesign input {
+  width: 60%;
+  height: 30px;
+  margin: 1px 0;
+}
+
+.FormDesign input[type="text"] {
+  width: calc(100% - 8px);
+}
+.FormDesign input[type=submit] {
+  color: aliceblue;
+  font-weight: bold;
+  font-size: medium;
+}

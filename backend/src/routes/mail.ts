@@ -10,3 +10,5 @@ const mailRoutes = Router();
 
 
 mailRoutes.post("/sendmail", verifyToken, mailer.sendMail)
+
+export default mailRoutes;

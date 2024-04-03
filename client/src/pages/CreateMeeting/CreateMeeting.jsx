@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { v1 as uuid } from "uuid";
 import { useEffect } from "react";
 
+
 export default function CreateMeeting() {
   const auth = useAuth();
   const navigate = useNavigate();
@@ -15,6 +16,11 @@ export default function CreateMeeting() {
     const id = uuid();
     navigate(`/room/${id}`);
   };
+
+  const CreateMeet = () => {
+    navigate(`/create/meet`);
+  };
+
   useEffect(() => {
     if (!auth?.isLoggedIn) {
       return navigate("/login");
@@ -83,8 +89,10 @@ export default function CreateMeeting() {
                 width: "50%",
                 height: "45px",
               }}
+
+              onClick={CreateMeet}
             >
-              Schedule a meeting
+              Meet me
             </Button>
           </Stack>
         </main>

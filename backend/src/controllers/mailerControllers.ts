@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import User from "../models/user";
 import mail from "../config/mailservice";
 import { emailInfo } from "../../shared/interfaces/interface"
+
 class MailerController {
   async sendMail(req: Request, res: Response) {
     const user = await User.findById(res.locals.jwtData.id);
@@ -14,7 +15,12 @@ class MailerController {
         emails,
         id,
       };
-      mail.sendInvite(data);
+
+      try {
+        mail.sendInvite(data);
+      } catch (e:any) {
+        res.status(400).send({ message: e.message})
+      }
 
     res.status(201).send({});
   }

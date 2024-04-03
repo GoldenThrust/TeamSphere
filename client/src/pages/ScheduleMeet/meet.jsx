@@ -1,31 +1,32 @@
 import React from "react";
 import { toast } from "react-hot-toast";
-import { useForm } from "react-hook-form";
 import { sendMeet } from "../../utils/request";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { v1 as uuid } from "uuid";
-import { useEffect } from "react";
 import { useAuth } from "../../context/useContext";
-
 function MeetMe() {
   const auth = useAuth();
   const navigate = useNavigate();
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
+  if (!auth?.isLoggedIn) {
+    return navigate("/login");
+  }
 
-  useEffect(() => {
-    if (!auth?.isLoggedIn) {
-      return navigate("/login");
-    }
-  });
-  const onSubmit = async (data) => {
-    const { emails } = data;
+  const onSubmit = (data) => {
+    console.log(data);
+    const { email } = data;
 
     try {
       const id = uuid();
-      
+
       toast.loading("Sending mail", { id: "mail" });
-      await sendMeet(emails, id);
+      sendMeet(email, id);
       toast.success("mail sent", { id: "mail" });
       navigate(`/room/${id}`);
     } catch (error) {
@@ -34,22 +35,31 @@ function MeetMe() {
   };
 
   return (
-    <div>
-      <h2>Send Meet me</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="emails">Email Address(es):</label>
-        <input
-          type="text"
-          id="emails"
-          name="emails"
-          ref={register({ required: true })}
-          placeholder="Enter Email Address(es) separated by comma"
-        />
-        {errors.emails && <span>This field is required</span>}
-
-        <input type="submit" value="Generate HTML" />
+    <>
+    <header style={{ padding: "20px"}}>
+      <div>
+        <Link to={"/"}>
+          <img src="/TeamSphere.svg" alt="TeamSphere Logo" />
+        </Link>
+      </div>
+    </header>
+    <div className="center w-100">
+      <h2 style={{ textAlign: "center" }}>Meet me</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="FormDesign">
+        <label>
+          Email Address(es): <br />
+          <input
+            {...register("email")}
+            required
+            type="text"
+            placeholder="Enter Email Address(es) separated by comma"
+          />
+        </label>
+        {errors.email && <p>Email is required</p>}
+        <input type="submit" value="Send Meet" className="button" />
       </form>
     </div>
+    </>
   );
 }
 

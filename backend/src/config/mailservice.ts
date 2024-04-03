@@ -1,7 +1,7 @@
 import { createTransport, Transporter } from "nodemailer";
 import fs from "fs";
 import { info } from "console";
-import { emailInfo } from "../../shared/interfaces/interface"
+import { emailInfo } from "../../shared/interfaces/interface";
 
 class MailService {
   transporter: Transporter;
@@ -20,28 +20,40 @@ class MailService {
   }
 
   sendInvite(Data: emailInfo) {
-    let modifiedHTML;
-    fs.readFile("./src/utils/index.html", "utf8", (err, data) => {
-      if (err) {
-        console.error("Error reading HTML file:", err);
-        return;
-      }
+    const HTML = `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Invitation to Meet in Team Sphere</title>
+      </head>
+      <body>
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #333333;">Invitation to Meet in Team Sphere</h2>
+              <p>Hi</p>
+              <p>I hope you're doing well!</p>
+              <p>I'm excited to invite you to join me in <a href="https://teamsphere-1-y8kv.onrender.com/room/${Data.id}">TeamSphere</a> a friendly chat and catch-up. Let's connect and discuss anything on your mind, whether it's work-related or just to catch up on life.</p>
+              <p>Team Sphere provides a fantastic space for us to interact, collaborate, and share ideas effortlessly. I'm looking forward to seeing you there!</p>
+              <p>Please let me know if this works for you, or if you need to suggest an alternative time. Your flexibility is greatly appreciated!</p>
+              <p>If you have any questions about accessing Team Sphere or need assistance, feel free to reach out. I'm here to help!</p>
+              <p>Looking forward to our chat!</p>
+              <p>Best regards,<br>${Data.name}</p>
+          </div>
+      </body>
+      </html>`;
+    let emailArray;
 
-      const replacements = {
-        Name: Data.name,
-        ID: Data.id,
-      };
-
-      modifiedHTML = replaceText(data, replacements);
-    });
-
-    const emailArray = Data.emails.split(",").map(email => email.trim());
+    try {
+      emailArray = Data.emails.split(",").map((email) => email.trim());
+    } catch (e: any) {
+      throw new Error(`Wrong mail format: ${e.message}`);
+    }
 
     const mailOptions = {
       from: "buynance631@gmail.com",
       to: emailArray,
       subject: "Meet Me",
-      text: modifiedHTML,
+      html: HTML,
     };
 
     this.transporter.sendMail(mailOptions, (error, info) => {
@@ -52,12 +64,6 @@ class MailService {
       }
     });
   }
-}
-
-function replaceText(htmlContent: string, replacements: any) {
-  return htmlContent.replace(/{{(.*?)}}/g, (match, key) => {
-    return replacements[key.trim()] || "";
-  });
 }
 
 const mail = new MailService();

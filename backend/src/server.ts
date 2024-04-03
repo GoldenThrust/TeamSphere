@@ -9,6 +9,7 @@ import Room from "./models/room";
 import authenticateToken from "./utils/validateUser";
 import User from "./models/user";
 import mail from "./config/mailservice";
+import mailRoutes from "./routes/mail";
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
@@ -47,6 +48,7 @@ app.get("/test", (req, res) => {
 });
 
 app.use("/user", userRoutes);
+app.use("/mail", mailRoutes)
 
 
 io.on("connection", (socket) => {

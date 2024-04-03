@@ -40,10 +40,6 @@ export default function Room() {
   });
 
   
-  useEffect(()=> {
-    console.log(peers)
-  }, [peers])
-
   useEffect(() => {
     document.body.style.overflow = "hidden";
     navigator.mediaDevices
@@ -93,7 +89,6 @@ export default function Room() {
           const item = peersRef.current.find((p) => p.peerID === id);
 
           if (ReturnSignal.current.includes(item.peerID)) {
-            console.log(item, "Return signal");
             return;
           }
 
@@ -161,16 +156,12 @@ export default function Room() {
   }
 
   socket.on("receiveEndCall",({ id })=> {
-    console.log("Received")
     const item = peersRef.current.find((p) => p.peerID === id);
 
-    console.log(item)
     if (item) {
       item.peer.destroy();
-      console.log("beforeDestroy", peersRef.current.length, peers.length)
       peersRef.current = peersRef.current.filter((p) => p.peerID !== id);
       setPeers((prevPeers) => prevPeers.filter((p) => p.peerID !== id));
-      console.log("AfterDestroy", peersRef.current.length, peers.length)
     }
   })
 

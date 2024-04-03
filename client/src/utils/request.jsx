@@ -41,12 +41,12 @@ export const logoutUser = async () => {
   return data;
 };
 
-export const sendMeet = async (email, id) => {
+export const sendMeet = async (emails, id) => {
   const token = localStorage.getItem("token");
-  const res = await axios.post("/meet", { email, id, token });
+  const res = await axios.post("/mail/sendmail", { emails, id, token });
   if (res.status !== 201) {
     throw new Error("Unable to create meet");
   }
   const data = await res.data;
-  return res.status(201).json(data);
+  return data;
 };
