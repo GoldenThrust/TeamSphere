@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const userSchema = new Schema({
-    firstName: {
+    firstname: {
         type: String,
         required: true
     },
-    lastName: {
+    lastname: {
         type: String,
         required: true
     },
@@ -23,7 +23,5 @@ const userSchema = new Schema({
         type: String
     }
 }, { timestamps: true });
-// model
 const User = mongoose_1.default.model("User", userSchema);
-// export
-module.exports = User;
+exports.default = User;

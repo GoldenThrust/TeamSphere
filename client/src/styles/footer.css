@@ -1,0 +1,16 @@
+footer {
+    color: aliceblue;
+    display: flex;
+    background: url('/src/assets/footerBg.png') no-repeat;
+    background-position: bottom left;
+    background-size: cover;
+    padding: 50px 20px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+footer .developers {
+    margin-top: 80px;
+}
