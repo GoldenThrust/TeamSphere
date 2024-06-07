@@ -10,11 +10,14 @@ const Video = ({ peer }) => {
   const ref = useRef();
 
   useEffect(() => {
-    peer.on("stream", (stream) => {
-      ref.current.srcObject = stream;
-    });
-    ref.current.srcObject = peer.streams[0];
-  }, [peer, peer._connected]);
+    if (!peer._events.stream) {
+      peer.on("stream", (stream) => {
+        ref.current.srcObject = stream;
+      });
+      console.log(peer)
+    }
+  
+  }, [peer, peer._remoteStreams]);
 
   return (
     <div className="video-item">
@@ -30,16 +33,16 @@ export default function Room() {
   const ReturnSignal = useRef([]);
   const navigate = useNavigate();
   const { roomID } = useParams();
-  const socket = io("https://teamsphere-ckxa.onrender.com", {
-  // const socket = io("http://localhost:5000", {
+  // const socket = io("https://teamsphere-ckxa.onrender.com", {
+  const socket = io("https://192.168.43.175", {
+  // const socket = io("https://localhost", {
     withCredentials: true,
     query: {
       roomId: roomID,
-      token: localStorage.getItem("token")
+      token: localStorage.getItem("token"),
     },
   });
 
-  
   useEffect(() => {
     document.body.style.overflow = "hidden";
     navigator.mediaDevices
@@ -155,7 +158,7 @@ export default function Room() {
     navigate("/create");
   }
 
-  socket.on("receiveEndCall",({ id })=> {
+  socket.on("receiveEndCall", ({ id }) => {
     const item = peersRef.current.find((p) => p.peerID === id);
 
     if (item) {
@@ -163,7 +166,7 @@ export default function Room() {
       peersRef.current = peersRef.current.filter((p) => p.peerID !== id);
       setPeers((prevPeers) => prevPeers.filter((p) => p.peerID !== id));
     }
-  })
+  });
 
   return (
     <>
@@ -175,7 +178,7 @@ export default function Room() {
           <div className="video-item">
             <video ref={userVideo} autoPlay playsInline></video>
           </div>
-          {peersRef.current.map(({peer, peerID}) => {
+          {peersRef.current.map(({ peer, peerID }) => {
             return <Video peer={peer} key={peerID} />;
           })}
         </div>

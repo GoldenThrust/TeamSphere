@@ -13,7 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/uuid": "^9.0.8",
     "bcrypt": "^5.1.1",
     "concurrently": "^8.2.0",
     "cookie-parser": "^1.4.6",
@@ -30,6 +29,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.8",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",

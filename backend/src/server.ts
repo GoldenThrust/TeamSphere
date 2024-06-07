@@ -4,19 +4,29 @@ import userRoutes from "./routes/user";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
-import { createServer } from "http";
+import { createServer } from "https";
 import Room from "./models/room";
 import authenticateToken from "./utils/validateUser";
 import User from "./models/user";
 import mail from "./config/mailservice";
 import mailRoutes from "./routes/mail";
+import fs from "fs";
+import path from "path";
 require("dotenv").config();
 
-const PORT = process.env.PORT || 5000;
-const allowUrl = "https://teamsphere-1-y8kv.onrender.com";
-// const allowUrl = "http://localhost:3000";
+const PORT = process.env.PORT || 443;
+// const allowUrl = "https://teamsphere-1-y8kv.onrender.com";
+const allowUrl = "https://192.168.43.175:3000";
 const app = express();
-const httpServer = createServer(app);
+const certdir = "C:/Users/HP ZBOOK X360 G5/Documents/https";
+
+const options = {
+  key: fs.readFileSync(path.join(certdir, "localhost.key")),
+  cert: fs.readFileSync(path.join(certdir, "localhost.pem")),
+  passphrase: "Golden"
+};
+
+const httpServer = createServer(options, app);
 
 const io = new Server(httpServer, {
   cors: {
@@ -48,11 +58,10 @@ app.get("/test", (req, res) => {
 });
 
 app.use("/user", userRoutes);
-app.use("/mail", mailRoutes)
-
+app.use("/mail", mailRoutes);
 
 io.on("connection", (socket) => {
-  let user: any = '';
+  let user: any = "";
   //@ts-ignore
   let roomID: any = socket.room;
   //@ts-ignore
@@ -66,7 +75,11 @@ io.on("connection", (socket) => {
 
   socket.on("joinroom", async (roomID) => {
     try {
-      const roomsLength = await Room.countDocuments({ roomID, active: true, user: { $ne: user} });
+      const roomsLength = await Room.countDocuments({
+        roomID,
+        active: true,
+        user: { $ne: user },
+      });
       if (roomsLength === 4) {
         socket.emit("roomfull");
         return;
@@ -74,7 +87,6 @@ io.on("connection", (socket) => {
 
       const userInRoom = await Room.findOne({ user, roomID, active: true });
 
-      
       if (userInRoom) {
         //@ts-ignore
         socket.emit("alreadyinroom", socket.user);
@@ -96,7 +108,7 @@ io.on("connection", (socket) => {
       } else {
         await Room.create({ roomID, user, socketID: socket.id });
       }
-      
+
       const usersInThisRoom = await Room.find({
         roomID,
         user: { $ne: user },
@@ -128,25 +140,25 @@ io.on("connection", (socket) => {
       user,
       roomID,
       active: true,
-    })
+    });
 
     const id = userRoomID?.socketID;
-    
+
     usersInThisRoom.forEach(({ socketID }) => {
-      io.to(socketID).emit("receiveEndCall", { id })
-    })
+      io.to(socketID).emit("receiveEndCall", { id });
+    });
     socket.disconnect();
-  })
+  });
 
   socket.on("disconnect", async () => {
     try {
-      await Room.deleteOne({ user, roomID })
+      await Room.deleteOne({ user, roomID });
       // await Room.findOneAndUpdate(
       //   { user, roomID },
       //   { $set: { active: false } },
       //   { new: true }
       // );
-    
+
       // io.to()emit("userDisconnected", { user }); to do set user rom in authenticated so that it can destroy peer in room
     } catch (error) {
       console.error("Error handling disconnect:", error);
@@ -160,9 +172,9 @@ httpServer.listen(PORT, () => {
       console.log("DB connection successful");
     })
     .catch((err) => {
-      console.log("DB connection failed", err);
+      console.error("DB connection failed", err);
     });
-    mail
+  mail;
   console.log(`Server is running on port ${PORT}`);
 });
 

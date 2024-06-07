@@ -4,9 +4,8 @@ require("dotenv").config();
 class DB {
   constructor() {
     const uri: string =`${process.env.DB_CONNECTION}`;
-    console.log(uri);
     try {
-      mongoose.connect(uri, { autoIndex: true });
+      mongoose.connect("mongodb://0.0.0.0:27017/TeamSphere", { autoIndex: true });
     } catch (error) {
       console.error(error);
     }

@@ -48,7 +48,7 @@ export default function SignUp() {
   };
 
   useEffect(() => {
-    if (auth?.isLoggedIn) {
+    if (auth.isLoggedIn) {
       return navigate("/create");
     }
   });

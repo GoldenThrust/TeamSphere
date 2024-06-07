@@ -20,8 +20,9 @@ window.global = window;
 window.process = process;
 window.Buffer = [];
 
-axios.defaults.baseURL = "https://teamsphere-ckxa.onrender.com";
-// axios.defaults.baseURL = "http://localhost:5000";
+// axios.defaults.baseURL = "https://teamsphere-ckxa.onrender.com";
+axios.defaults.baseURL = "https://192.168.43.175";
+// axios.defaults.baseURL = "https://localhost";
 axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([
