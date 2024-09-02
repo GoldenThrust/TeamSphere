@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
-require("dotenv").config();
+import { Dev } from "../utils/constants"
+import "dotenv/config";
 
 class DB {
   constructor() {
-    const uri: string =`${process.env.DB_CONNECTION}`;
+    const uri: string = Dev ? "mongodb://0.0.0.0:27017/TeamSphere" : `${process.env.DB_CONNECTION}`;
     try {
-      mongoose.connect("mongodb://0.0.0.0:27017/TeamSphere", { autoIndex: true });
+      // mongoose.connect(, { autoIndex: true });
+      mongoose.connect(uri, { autoIndex: true });
     } catch (error) {
       console.error(error);
     }

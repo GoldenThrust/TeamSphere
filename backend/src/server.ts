@@ -4,6 +4,7 @@ import userRoutes from "./routes/user";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
+// import { createServer } from "http";
 import { createServer } from "https";
 import Room from "./models/room";
 import authenticateToken from "./utils/validateUser";
@@ -11,22 +12,25 @@ import User from "./models/user";
 import mail from "./config/mailservice";
 import mailRoutes from "./routes/mail";
 import fs from "fs";
-import path from "path";
-require("dotenv").config();
+import "dotenv/config";
+
+
 
 const PORT = process.env.PORT || 443;
-// const allowUrl = "https://teamsphere-1-y8kv.onrender.com";
-const allowUrl = "https://192.168.43.175:3000";
+const allowUrl = "https://teamsphere-1-y8kv.onrender.com";
+// const allowUrl = "https://192.168.76.163:3000";
 const app = express();
-const certdir = "C:/Users/HP ZBOOK X360 G5/Documents/https";
+// const certdir = "C:\\Users\\adeni\\Documents\\Cert\\";
 
-const options = {
-  key: fs.readFileSync(path.join(certdir, "localhost.key")),
-  cert: fs.readFileSync(path.join(certdir, "localhost.pem")),
-  passphrase: "Golden"
-};
+// const options = {
+//   key: fs.readFileSync(`${certdir}localhost.key`),
+//   cert: fs.readFileSync(`${certdir}localhost.crt`),
+//   passphrase: process.env.CERT_PASSWORD
+// };
 
-const httpServer = createServer(options, app);
+
+const httpServer = createServer(app);
+// const httpServer = createServer(options, app);
 
 const io = new Server(httpServer, {
   cors: {
@@ -53,7 +57,7 @@ io.use((socket, next) => {
 
 io.use(authenticateToken);
 
-app.get("/test", (req, res) => {
+app.get("/", (req, res) => {
   res.json({ hello: "world" });
 });
 

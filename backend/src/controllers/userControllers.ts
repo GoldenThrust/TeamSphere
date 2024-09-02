@@ -42,8 +42,6 @@ class UserController {
 
       const token = createToken(user._id.toString(), user.email, "7d");
       const expires = new Date();
-      /* In the provided code, the `expires` variable is being used to set the expiration date for the
-      cookie that is being set in the response. */
       expires.setDate(expires.getDate() + 7);
       res.cookie(COOKIE_NAME, token, {
         secure: true,
@@ -178,6 +176,6 @@ class UserController {
   }  
 }
 
-const userContollers = new UserController();
+const userContoller = new UserController();
 
-export default userContollers;
+export default userContoller;

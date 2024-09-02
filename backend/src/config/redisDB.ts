@@ -1,5 +1,7 @@
 import { promisify } from "util";
 import { createClient, RedisClientType } from "redis";
+import { Dev } from "../utils/constants";
+import fs from "fs";
 
 // Define custom types or interfaces as needed
 
@@ -7,10 +9,17 @@ class RedisClient {
   client;
 
   constructor() {
-    const host: string = process.env.REDIS_HOST || "localhost";
-    const port: string | number = process.env.REDIS_PORT || 6379;
-
-    this.client = createClient({ url: `redis://${host}:${port}` });
+    if (Dev) {
+      this.client = createClient({ url: `redis://localhost:6379` });
+    } else {
+      this.client = createClient({
+        password: process.env.REDIS_PASSWORD,
+        socket: {
+          host: process.env.REDIS_HOST,
+          port: Number(process.env.REDIS_PORT)
+        },
+      });
+    }
 
     this.client.on("error", (err: Error) => {
       console.error("Redis client failed to connect:", err);
