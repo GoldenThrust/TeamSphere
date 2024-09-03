@@ -42,10 +42,10 @@ const io = new Server(server, {
 app.use(cors({ origin: allowUrl, credentials: true }));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
-app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
+app.use(express.static(path.resolve(__dirname, '../../frontend/build')));
 
 app.get('*', (req, res) => {
-   res.sendFile(path.resolve(__dirname, '../../frontend/dist', 'index.html'));
+   res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
 });
 
 app.get("/", (req, res) => {
