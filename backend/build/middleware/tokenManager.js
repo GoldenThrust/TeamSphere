@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createToken = createToken;
 exports.verifyToken = verifyToken;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const constants_1 = require("../utils/constants");
 function createToken(id, email, expiresIn) {
     const payload = { id, email };
     const jwtSecret = process.env.JWT_SECRET;
@@ -27,8 +26,8 @@ function createToken(id, email, expiresIn) {
 }
 function verifyToken(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const token = req.signedCookies[constants_1.COOKIE_NAME];
-        // const token = req.body.token;
+        // const token = req.signedCookies[COOKIE_NAME];
+        const token = req.body.token;
         if (!token || token.trim() === "") {
             return res.status(401).json({ message: "Token Not Received" });
         }

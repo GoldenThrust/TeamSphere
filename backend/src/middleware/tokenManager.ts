@@ -18,8 +18,8 @@ export async function verifyToken(
   res: Response,
   next: NextFunction
 ) {
-  const token = req.signedCookies[COOKIE_NAME];
-  // const token = req.body.token;
+  // const token = req.signedCookies[COOKIE_NAME];
+  const token = req.body.token;
   if (!token || token.trim() === "") {
     return res.status(401).json({ message: "Token Not Received" });
   }

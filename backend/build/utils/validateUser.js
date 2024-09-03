@@ -5,10 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = authenticateToken;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const constants_1 = require("./constants");
 function authenticateToken(socket, next) {
-    const token = socket.request.signedCookies[constants_1.COOKIE_NAME];
-    // const token = socket.handshake.query.token;
+    // const token = socket.request.signedCookies[COOKIE_NAME]
+    const token = socket.handshake.query.token;
     const roomID = socket.handshake.query.roomId;
     if (!token || token.trim() === "") {
         return next();
