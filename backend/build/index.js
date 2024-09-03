@@ -48,9 +48,9 @@ const io = new socket_io_1.Server(server, {
 app.use((0, cors_1.default)({ origin: allowUrl, credentials: true }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)(process.env.COOKIE_SECRET));
-app.use(express_1.default.static(path_1.default.resolve(__dirname, '../../frontend/dist')));
+app.use(express_1.default.static(path_1.default.resolve(__dirname, '../../frontend/build')));
 app.get('*', (req, res) => {
-    res.sendFile(path_1.default.resolve(__dirname, '../../frontend/dist', 'index.html'));
+    res.sendFile(path_1.default.resolve(__dirname, '../../frontend/build', 'index.html'));
 });
 app.get("/", (req, res) => {
     return res.json({ hello: "world" });
