@@ -26,17 +26,13 @@ class RedisClient {
     });
   }
 
-  connected(): Promise<boolean | Error> {
-    return new Promise((resolve, reject) => {
-      this.client
-        .connect()
-        .then(() => {
-          resolve(true);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
+  async connected(){
+    try {
+      await this.client.connect();
+      console.log("Successfully connected to Redis!");
+    } catch (err) {
+      console.error("Redis client failed to connect:", err);
+    }
   }
 
   async set(key: string, value: any, exp: number): Promise<string> {

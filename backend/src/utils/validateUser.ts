@@ -5,8 +5,8 @@ import { NextFunction } from "express";
 import { COOKIE_NAME } from "./constants";
 
 export default function authenticateToken(socket: any, next: any) {
-  // const token = socket.request.signedCookies[COOKIE_NAME]
-  const token = socket.handshake.query.token;
+  const token = socket.request.signedCookies[COOKIE_NAME]
+  // const token = socket.handshake.query.token;
   const roomID = socket.handshake.query.roomId
   if (!token || token.trim() === "") {
     return next();

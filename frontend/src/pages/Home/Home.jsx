@@ -4,7 +4,7 @@ import Footer from "./footer";
 import "../../styles/header.css";
 import { styled } from "@mui/system";
 import { Typography } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from '@mui/material/Grid2';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import realTimeImage from "../../assets/realTime.png";

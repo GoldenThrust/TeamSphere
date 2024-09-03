@@ -4,22 +4,18 @@ import userRoutes from "./routes/user";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
-// import { createServer } from "http";
-import { createServer } from "https";
+import { createServer } from "http";
+// import { createServer } from "https";
 import Room from "./models/room";
 import authenticateToken from "./utils/validateUser";
-import User from "./models/user";
-import mail from "./config/mailservice";
 import mailRoutes from "./routes/mail";
-import fs from "fs";
 import "dotenv/config";
-
-
+import redisClient from "./config/redisDB";
+import path from "path";
 
 const PORT = process.env.PORT || 443;
-const allowUrl = "https://teamsphere-1-y8kv.onrender.com";
-// const allowUrl = "https://192.168.76.163:3000";
-const app = express();
+const allowUrl = "https://192.168.76.163:3000";
+// const allowUrl = "https://teamsphere-1-y8kv.onrender.com";
 // const certdir = "C:\\Users\\adeni\\Documents\\Cert\\";
 
 // const options = {
@@ -28,11 +24,14 @@ const app = express();
 //   passphrase: process.env.CERT_PASSWORD
 // };
 
+const app = express();
+const server = createServer(app);
 
-const httpServer = createServer(app);
+
+
 // const httpServer = createServer(options, app);
 
-const io = new Server(httpServer, {
+const io = new Server(server, {
   cors: {
     origin: [allowUrl],
     methods: ["GET", "POST"],
@@ -43,6 +42,20 @@ const io = new Server(httpServer, {
 app.use(cors({ origin: allowUrl, credentials: true }));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
+
+app.get('*', (req, res) => {
+   res.sendFile(path.resolve(__dirname, '../../frontend/dist', 'index.html'));
+});
+
+app.get("/", (req, res) => {
+  return res.json({ hello: "world" });
+});
+
+app.use("/user", userRoutes);
+app.use("/mail", mailRoutes);
+
+
 io.use((socket, next) => {
   //@ts-ignore
   cookieParser(process.env.COOKIE_SECRET)(socket.request, {}, (err) => {
@@ -56,14 +69,6 @@ io.use((socket, next) => {
 });
 
 io.use(authenticateToken);
-
-app.get("/", (req, res) => {
-  res.json({ hello: "world" });
-});
-
-app.use("/user", userRoutes);
-app.use("/mail", mailRoutes);
-
 io.on("connection", (socket) => {
   let user: any = "";
   //@ts-ignore
@@ -170,16 +175,10 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(PORT, () => {
-  DB.connected()
-    .then((res) => {
-      console.log("DB connection successful");
-    })
-    .catch((err) => {
-      console.error("DB connection failed", err);
-    });
-  mail;
-  console.log(`Server is running on port ${PORT}`);
+server.listen(PORT, () => {
+  DB.connected().catch(console.dir);
+  redisClient.connected().catch(console.dir);
+  console.log(`Server is running on port http://localhost:${PORT}`);
 });
 
 export default app;

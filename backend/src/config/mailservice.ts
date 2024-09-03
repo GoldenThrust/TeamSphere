@@ -1,5 +1,4 @@
 import { createTransport, Transporter } from "nodemailer";
-import { Dev } from "../utils/constants"
 import { emailInfo } from "../shared/interfaces/interface";
 
 class MailService {

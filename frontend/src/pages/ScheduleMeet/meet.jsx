@@ -1,4 +1,3 @@
-import React from "react";
 import { toast } from "react-hot-toast";
 import { sendMeet } from "../../utils/request";
 import { Link, useNavigate } from "react-router-dom";

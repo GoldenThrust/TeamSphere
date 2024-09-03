@@ -1,0 +1,15 @@
+{
+  "name": "teamsphere",
+  "version": "1.0.0",
+  "description": "Welcome to TeamSphere, your all-in-one solution for enhancing team collaboration in virtual environments. Whether you're conducting online teaching sessions or organizing important meetings, TeamSphere ensures a smooth and productive experience.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adeniji Olajide",
+  "license": "ISC",
+  "dependencies": {
+    "node-stdlib-browser": "^1.2.0",
+    "vite-plugin-node-stdlib-browser": "^0.2.1"
+  }
+}

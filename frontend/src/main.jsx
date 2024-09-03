@@ -1,5 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import Home from "./pages/Home/Home";
 import SignIn from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
@@ -12,16 +12,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ErrorPage from "./error.page";
 import { Toaster } from "react-hot-toast";
-import * as serviceWorker from "./serviceWorker";
-import * as process from 'process';
 import MeetMe from "./pages/ScheduleMeet/meet";
+import { Buffer } from 'buffer';
+import process from 'process';
 
-window.global = window;
+window.Buffer = Buffer;
 window.process = process;
-window.Buffer = [];
 
-axios.defaults.baseURL = "https://teamsphere-ckxa.onrender.com";
-// axios.defaults.baseURL = "https://192.168.76.163";
 // axios.defaults.baseURL = "https://localhost";
 axios.defaults.withCredentials = true;
 
@@ -57,14 +54,11 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
     <AuthProvider>
       <Toaster position="top-right" />
       <RouterProvider router={router} />
     </AuthProvider>
-  </React.StrictMode>
+  </StrictMode>
 );
-
-
-serviceWorker.unregister();
