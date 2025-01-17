@@ -1,5 +1,6 @@
 # TeamSphere
 > Note: This project is no longer maintained. For the latest updates and a more advanced video chat application, please visit [Sync](https://github.com/GoldenThrust/Sync).
+
 Welcome to TeamSphere, your all-in-one solution for enhancing team collaboration in virtual environments. Whether you're conducting online teaching sessions or organizing important meetings, TeamSphere ensures a smooth and productive experience.
 
 # Installation
